@@ -7,6 +7,7 @@ import TodoList from './components/TodoList';
 function App() {
   const [inputValue, setInputValue] = useState('');
   const [todos, setTodos] = useState([]);
+  
   return (
     <div className="TODO APP">
       <Layout>
@@ -60,8 +61,10 @@ function App() {
    // console.log("deleting id " + id);
   }
 
+  /**
+   * Check the completed box
+   */
   function onCompleted(id) {
-    console.log(`App.onCompleted(${id})`);
     setTodos(
       todos.map((todo, index) => {
         if (id === index) {
@@ -71,7 +74,6 @@ function App() {
         return todo;
       })
     );
-//    document.getElementById('TodoItem.' +  id).innerHTML = "COW";
   }
 
 }
