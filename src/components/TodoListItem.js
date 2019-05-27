@@ -1,16 +1,18 @@
 import React, {memo} from 'react';
+import { useState } from 'react';
 import { ListItem, Checkbox, ListItemText, ListItemSecondaryAction, IconButton} from '@material-ui/core';
 import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
 
 function TodoListItem(props) {
+    //const [checked, setChecked] = useState(false);
     return (
         <ListItem divider={props.divider}>
             <Checkbox
-                onClick={props.onCheckToggleBox}
+                onClick={props.onCheckBoxToggle}
                 checked={props.checked}
                 disableRipple
             />
-            <ListItemText primary={props.text}/>
+            <ListItemText primary={props.text} />
             <ListItemSecondaryAction>
                 <IconButton aria-label="Delete Todo" onClick={props.onButtonClick}>
                     <DeleteOutlined/>
@@ -19,8 +21,6 @@ function TodoListItem(props) {
         </ListItem>
     );
     
-
-
 }
 
 export default memo(TodoListItem);

@@ -7,16 +7,16 @@ function TodoList(props){
         <div>
             {props.items.length > 0 && (
                 <Paper style={{margin: 16}}>
-                    <List style={{overflow:'scroll'}}>
+                    <List>
                         {props.items.map(
                             (todo, idx) => (
                                 <TodoListItem
-                                    //{...todo}
                                     text={todo.inputValue}
                                     key={`TodoItem.${idx}`}
+                                    checked={todo.checked}
                                     divider={idx !== props.items.length - 1}
                                     onButtonClick={() => props.onItemRemove(idx)}
-                                    oCheckBoxToggle={() => props.onItemCheck(idx)}
+                                    onCheckBoxToggle={() => props.onItemCheck(idx)}
                                 />
                             )
                         )}
