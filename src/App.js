@@ -6,13 +6,16 @@ import TodoList from './components/TodoList';
 
 function App() {
   const [inputValue, setInputValue] = useState('');
-  //const [todos, setTodos] = useState([]);
   const [lists, setLists] = useState([[]]);
   const [selectedListIndex, setSelectedListIndex] = useState(0);
 
   return (
     <div className="TODO APP">
-      <Layout>
+      <Layout
+        onNewList={createNewList}
+        switchPage={switchList}
+        lists={lists}
+      >
           <AddTodo 
             inputValue={inputValue}
             onInputChange={(e) => setInputValue(e.target.value)}
@@ -77,6 +80,18 @@ function App() {
     });
 
     setLists(listsCopy);
+  }
+
+  function createNewList() {
+    let listsCopy = lists.slice();
+    listsCopy.push([]);
+    setLists(listsCopy);
+    setSelectedListIndex(listsCopy.length -1);
+    
+  }
+
+  function switchList(index) {
+    setSelectedListIndex(index);
   }
 
 }

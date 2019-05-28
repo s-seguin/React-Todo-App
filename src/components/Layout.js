@@ -56,18 +56,24 @@ function Layout(props) {
             <ListItemText primary={'My Lists'} />
         </ListItem>
         <Divider/>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
+        {(props.lists).map((text, index) => (
+          <ListItem 
+            button key={index}
+            onClick={() => props.switchPage(index)}
+          >
             <ListItemIcon>
               <ListAlt/>
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemText primary={"List " + index} />
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        <ListItem button key={'newList'}>
+        <ListItem button 
+          key={'newList'}
+          onClick={props.onNewList}
+        >
             <ListItemIcon>
                 <Add/>
             </ListItemIcon>
@@ -86,18 +92,16 @@ function Layout(props) {
         <Toolbar style={{ height: 64 }}>
           <IconButton
             edge="start"
-            //className={classes.menuButton}
             color="inherit"
             aria-label="Menu"
             onClick={() => {
-              console.log("Menu press");
               setMenuOpen(!menuOpen);
               toggleDrawer(true);
             }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography color="inherit">TODO App</Typography>
+          <Typography color="inherit">Stuart's Todo App</Typography>
         </Toolbar>
       </AppBar>
       <Drawer open={menuOpen} onClose={toggleDrawer(false)}>
