@@ -6,8 +6,10 @@ import TodoList from './components/TodoList';
 
 function App() {
   const [inputValue, setInputValue] = useState('');
-  const [todos, setTodos] = useState([]);
-  
+  //const [todos, setTodos] = useState([]);
+  const [lists, setLists] = useState([[]]);
+  const [selectedListIndex, setSelectedListIndex] = useState(0);
+
   return (
     <div className="TODO APP">
       <Layout>
@@ -18,8 +20,8 @@ function App() {
             onInputKeyPress={checkIfEnter}
           />
           <TodoList
-            items={todos}
-            onItemRemove={onDelete}
+            items={lists[selectedListIndex]}
+            onItemRemove={onDeleteTodo}
             onItemCheck={onCompleted}
           />
       </Layout>
@@ -31,12 +33,10 @@ function App() {
    */
   function addTodo() {
     if (inputValue !== '') {
-      setTodos(
-        todos.concat({
-          inputValue,
-          checked: false,
-        })
-      );
+      let listsCopy = lists.slice();
+      listsCopy[selectedListIndex].push({inputValue, checked: false});
+
+      setLists(listsCopy);
     }
     setInputValue('');
   }
@@ -56,24 +56,27 @@ function App() {
    * Delete items that you don't want to have anymore
    * @param {*} id 
    */
-  function onDelete(id) {
-    setTodos(todos.filter((item, index) => id !== index));
-   // console.log("deleting id " + id);
+  function onDeleteTodo(id) {
+    let listsCopy = lists.slice();
+    listsCopy[selectedListIndex] = lists[selectedListIndex].filter((item, index) => index !== id);
+    setLists(listsCopy);
+
   }
 
   /**
    * Check the completed box
    */
   function onCompleted(id) {
-    setTodos(
-      todos.map((todo, index) => {
-        if (id === index) {
-          todo.checked = !todo.checked;
-        }
+    let listsCopy = lists.slice();
+    listsCopy[selectedListIndex] = lists[selectedListIndex].map((todo, index) => {
+      if (id === index) {
+        todo.checked = !todo.checked;
+      }
 
-        return todo;
-      })
-    );
+      return todo;
+    });
+
+    setLists(listsCopy);
   }
 
 }
