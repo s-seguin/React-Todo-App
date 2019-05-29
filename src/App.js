@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import './App.css';
-import Layout from './components/Layout';
-import AddTodo from './components/AddTodo';
-import TodoList from './components/TodoList';
+import React, { useState } from "react";
+import "./App.css";
+import Layout from "./components/Layout";
+import AddTodo from "./components/AddTodo";
+import TodoList from "./components/TodoList";
 
 function App() {
-  const [inputValue, setInputValue] = useState('');
-  const [lists, setLists] = useState([[]]);
+  const [inputValue, setInputValue] = useState("");
+  const [lists, setLists] = useState([{ name: "Default", todos: [] }]);
   const [selectedListIndex, setSelectedListIndex] = useState(0);
 
   return (
@@ -14,20 +14,21 @@ function App() {
       <Layout
         onNewList={createNewList}
         switchPage={switchList}
+        renameList={renameList}
         lists={lists}
         selectedIndex={selectedListIndex}
       >
-          <AddTodo 
-            inputValue={inputValue}
-            onInputChange={(e) => setInputValue(e.target.value)}
-            onButtonClick={addTodo}
-            onInputKeyPress={checkIfEnter}
-          />
-          <TodoList
-            items={lists[selectedListIndex]}
-            onItemRemove={onDeleteTodo}
-            onItemCheck={onCompleted}
-          />
+        <AddTodo
+          inputValue={inputValue}
+          onInputChange={e => setInputValue(e.target.value)}
+          onButtonClick={addTodo}
+          onInputKeyPress={checkIfEnter}
+        />
+        <TodoList
+          items={lists[selectedListIndex].todos}
+          onItemRemove={onDeleteTodo}
+          onItemCheck={onCompleted}
+        />
       </Layout>
     </div>
   );
@@ -36,35 +37,34 @@ function App() {
    * Add Item to the list of todo items
    */
   function addTodo() {
-    if (inputValue !== '') {
+    if (inputValue !== "") {
       let listsCopy = lists.slice();
-      listsCopy[selectedListIndex].push({inputValue, checked: false});
+      listsCopy[selectedListIndex].todos.push({ inputValue, checked: false });
 
       setLists(listsCopy);
     }
-    setInputValue('');
+    setInputValue("");
   }
 
   /**
    * Check if we pressed the enter key to make it quicker to enter new items to the list
    */
   function checkIfEnter(e) {
-    let code = (e.keyCode ? e.keyCode : e.which);
+    let code = e.keyCode ? e.keyCode : e.which;
 
-    if (code === 13)
-      addTodo();
-
+    if (code === 13) addTodo();
   }
 
   /**
    * Delete items that you don't want to have anymore
-   * @param {*} id 
+   * @param {*} id
    */
   function onDeleteTodo(id) {
     let listsCopy = lists.slice();
-    listsCopy[selectedListIndex] = lists[selectedListIndex].filter((item, index) => index !== id);
+    listsCopy[selectedListIndex].todos = lists[selectedListIndex].todos.filter(
+      (item, index) => index !== id
+    );
     setLists(listsCopy);
-
   }
 
   /**
@@ -72,30 +72,36 @@ function App() {
    */
   function onCompleted(id) {
     let listsCopy = lists.slice();
-    listsCopy[selectedListIndex] = lists[selectedListIndex].map((todo, index) => {
-      if (id === index) {
-        todo.checked = !todo.checked;
-      }
+    listsCopy[selectedListIndex].todos = lists[selectedListIndex].todos.map(
+      (todo, index) => {
+        if (id === index) {
+          todo.checked = !todo.checked;
+        }
 
-      return todo;
-    });
+        return todo;
+      }
+    );
 
     setLists(listsCopy);
   }
 
   function createNewList() {
     let listsCopy = lists.slice();
-    listsCopy.push([]);
+    listsCopy.push({ name: "List" + listsCopy.length, todos: [] });
     setLists(listsCopy);
-    setSelectedListIndex(listsCopy.length -1);
-    
+    setSelectedListIndex(listsCopy.length - 1);
   }
 
   function switchList(index) {
     setSelectedListIndex(index);
   }
 
+  function renameList(newName) {
+    console.log("Rename list " + newName);
+    let listsCopy = lists.slice();
+    listsCopy[selectedListIndex].name = newName;
+    setLists(listsCopy);
+  }
 }
-
 
 export default App;

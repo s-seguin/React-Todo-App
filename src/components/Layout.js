@@ -4,6 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import MenuIcon from "@material-ui/icons/Menu";
 import Add from "@material-ui/icons/Add";
 import ListAlt from "@material-ui/icons/ListAlt";
+import Edit from "@material-ui/icons/Edit";
 
 import {
   AppBar,
@@ -13,7 +14,14 @@ import {
   Drawer,
   List,
   ListItem,
-  Divider
+  Divider,
+  TextField,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -35,8 +43,8 @@ const useStylesPaper = makeStyles(theme => ({
     margin: "auto",
     marginTop: 15,
     marginBottom: 15,
-    textAlign: "center",
-  },
+    textAlign: "center"
+  }
 }));
 
 function Layout(props) {
@@ -44,6 +52,16 @@ function Layout(props) {
 
   const classes = useStyles();
   const classesPaper = useStylesPaper();
+
+  const [open, setOpen] = React.useState(false);
+
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
 
   const toggleDrawer = open => event => {
     if (
@@ -69,11 +87,16 @@ function Layout(props) {
         </ListItem>
         <Divider />
         {props.lists.map((text, index) => (
-          <ListItem button key={index} onClick={() => props.switchPage(index)}>
+          <ListItem
+            button
+            key={index}
+            onClick={() => props.switchPage(index)}
+            selected={props.selectedIndex === index ? true : false}
+          >
             <ListItemIcon>
               <ListAlt />
             </ListItemIcon>
-            <ListItemText primary={"List " + index} />
+            <ListItemText primary={props.lists[props.selectedIndex].name} />
           </ListItem>
         ))}
       </List>
@@ -113,8 +136,50 @@ function Layout(props) {
       <Drawer open={menuOpen} onClose={toggleDrawer(false)}>
         {sideList("left")}
       </Drawer>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Rename</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To rename this list, please enter your new title below and press
+            rename.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="renameTF"
+            label="New List Title"
+            type="text"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              props.renameList(document.getElementById("renameTF").value);
+              handleClose();
+            }}
+            color="primary"
+          >
+            Rename
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Paper className={classesPaper.root}>
-        <Typography variant="h1">List {props.selectedIndex}</Typography>
+        <Typography variant="h1">
+          {props.lists[props.selectedIndex].name}
+        </Typography>
+        <Button onClick={handleClickOpen}>
+          <Edit />
+        </Button>
       </Paper>
       {props.children}
     </Paper>
