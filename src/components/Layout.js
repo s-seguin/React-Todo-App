@@ -2,8 +2,8 @@ import React, { memo } from "react";
 import { useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import MenuIcon from "@material-ui/icons/Menu";
-import Add from "@material-ui/icons/Add"
-import ListAlt from "@material-ui/icons/ListAlt"
+import Add from "@material-ui/icons/Add";
+import ListAlt from "@material-ui/icons/ListAlt";
 
 import {
   AppBar,
@@ -28,10 +28,22 @@ const useStyles = makeStyles({
   }
 });
 
+const useStylesPaper = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(3, 2),
+    width: "50%",
+    margin: "auto",
+    marginTop: 15,
+    marginBottom: 15,
+    textAlign: "center",
+  },
+}));
+
 function Layout(props) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const classes = useStyles();
+  const classesPaper = useStylesPaper();
 
   const toggleDrawer = open => event => {
     if (
@@ -52,17 +64,14 @@ function Layout(props) {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        <ListItem text key={'title'}>
-            <ListItemText primary={'My Lists'} />
+        <ListItem text key={"title"}>
+          <ListItemText primary={"My Lists"} />
         </ListItem>
-        <Divider/>
-        {(props.lists).map((text, index) => (
-          <ListItem 
-            button key={index}
-            onClick={() => props.switchPage(index)}
-          >
+        <Divider />
+        {props.lists.map((text, index) => (
+          <ListItem button key={index} onClick={() => props.switchPage(index)}>
             <ListItemIcon>
-              <ListAlt/>
+              <ListAlt />
             </ListItemIcon>
             <ListItemText primary={"List " + index} />
           </ListItem>
@@ -70,15 +79,12 @@ function Layout(props) {
       </List>
       <Divider />
       <List>
-        <ListItem button 
-          key={'newList'}
-          onClick={props.onNewList}
-        >
-            <ListItemIcon>
-                <Add/>
-            </ListItemIcon>
-            <ListItemText primary={'New List'} />
-          </ListItem>
+        <ListItem button key={"newList"} onClick={props.onNewList}>
+          <ListItemIcon>
+            <Add />
+          </ListItemIcon>
+          <ListItemText primary={"New List"} />
+        </ListItem>
       </List>
     </div>
   );
@@ -107,6 +113,9 @@ function Layout(props) {
       <Drawer open={menuOpen} onClose={toggleDrawer(false)}>
         {sideList("left")}
       </Drawer>
+      <Paper className={classesPaper.root}>
+        <Typography variant="h1">List {props.selectedIndex}</Typography>
+      </Paper>
       {props.children}
     </Paper>
   );

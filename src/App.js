@@ -15,6 +15,7 @@ function App() {
         onNewList={createNewList}
         switchPage={switchList}
         lists={lists}
+        selectedIndex={selectedListIndex}
       >
           <AddTodo 
             inputValue={inputValue}

@@ -1,10 +1,8 @@
 import React, {memo} from 'react';
-import { useState } from 'react';
 import { ListItem, Checkbox, ListItemText, ListItemSecondaryAction, IconButton} from '@material-ui/core';
 import DeleteOutlined from '@material-ui/icons/DeleteOutlined';
 
 function TodoListItem(props) {
-    //const [checked, setChecked] = useState(false);
     return (
         <ListItem divider={props.divider}>
             <Checkbox
