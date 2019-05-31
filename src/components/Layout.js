@@ -96,7 +96,7 @@ function Layout(props) {
             <ListItemIcon>
               <ListAlt />
             </ListItemIcon>
-            <ListItemText primary={props.lists[props.selectedIndex].name} />
+            <ListItemText primary={props.lists[index].name} />
           </ListItem>
         ))}
       </List>
@@ -174,12 +174,14 @@ function Layout(props) {
       </Dialog>
 
       <Paper className={classesPaper.root}>
-        <Typography variant="h1">
-          {props.lists[props.selectedIndex].name}
-        </Typography>
-        <Button onClick={handleClickOpen}>
-          <Edit />
-        </Button>
+        <div>
+          <IconButton onClick={handleClickOpen} display="inline">
+            <Edit />
+          </IconButton>
+          <Typography variant="h1" display="inline">
+            {props.lists[props.selectedIndex].name}
+          </Typography>
+        </div>
       </Paper>
       {props.children}
     </Paper>

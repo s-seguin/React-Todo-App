@@ -87,7 +87,7 @@ function App() {
 
   function createNewList() {
     let listsCopy = lists.slice();
-    listsCopy.push({ name: "List" + listsCopy.length, todos: [] });
+    listsCopy.push({ name: "List " + listsCopy.length, todos: [] });
     setLists(listsCopy);
     setSelectedListIndex(listsCopy.length - 1);
   }
