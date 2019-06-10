@@ -5,15 +5,16 @@ import AddTodo from "./components/AddTodo";
 import TodoList from "./components/TodoList";
 
 function App() {
-  const [inputValue, setInputValue] = useState("");
-  const [lists, setLists] = useState([{ name: "Default", todos: [] }]);
-  const [selectedListIndex, setSelectedListIndex] = useState(0);
+  const [inputValue, setInputValue] = useState(""); //holds the value of the addTodo input field
+  const [lists, setLists] = useState([{ name: "Default", todos: [] }]); //the collection of lists and there content
+  const [selectedListIndex, setSelectedListIndex] = useState(0); //keeps track of which list we are currently on
 
   return (
     <div className="TODO APP">
       <Layout
         onNewList={createNewList}
         switchPage={switchList}
+        deletePage={deleteList}
         renameList={renameList}
         lists={lists}
         selectedIndex={selectedListIndex}
@@ -85,6 +86,9 @@ function App() {
     setLists(listsCopy);
   }
 
+  /**
+   * Creates a new list and names it List 'X' where X is the number of lists we have - 1
+   */
   function createNewList() {
     let listsCopy = lists.slice();
     listsCopy.push({ name: "List " + listsCopy.length, todos: [] });
@@ -92,15 +96,41 @@ function App() {
     setSelectedListIndex(listsCopy.length - 1);
   }
 
+  /**
+   * Switch the list we are currently displaying
+   * @param {int} index
+   */
   function switchList(index) {
     setSelectedListIndex(index);
   }
 
+  /**
+   * Rename the list we are currently on
+   * @param {string} newName
+   */
   function renameList(newName) {
-    console.log("Rename list " + newName);
     let listsCopy = lists.slice();
     listsCopy[selectedListIndex].name = newName;
     setLists(listsCopy);
+  }
+
+  /**
+   * Delete the list we are currently on
+   */
+  function deleteList() {
+    //If there is only one list, reset its contents and name
+    if (selectedListIndex === 0) {
+      setLists([{ name: "Default", todos: [] }]);
+      setSelectedListIndex(0);
+    } else {
+      let listsCopy = lists.slice();
+      listsCopy = listsCopy.filter(
+        (list, index) => index !== selectedListIndex
+      );
+
+      setLists(listsCopy);
+      setSelectedListIndex(selectedListIndex - 1);
+    }
   }
 }
 

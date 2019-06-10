@@ -26,6 +26,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import Delete from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles({
   list: {
@@ -33,6 +34,9 @@ const useStyles = makeStyles({
   },
   fullList: {
     width: "auto"
+  },
+  btnStyles: {
+    textAlign: "center"
   }
 });
 
@@ -53,14 +57,23 @@ function Layout(props) {
   const classes = useStyles();
   const classesPaper = useStylesPaper();
 
-  const [open, setOpen] = React.useState(false);
+  const [openRenameDialog, setRenameOpen] = React.useState(false);
+  const [openDeleteDialog, setDeleteOpen] = React.useState(false);
 
-  function handleClickOpen() {
-    setOpen(true);
+  function handleRenameOpen() {
+    setRenameOpen(true);
   }
 
-  function handleClose() {
-    setOpen(false);
+  function handleRenameClose() {
+    setRenameOpen(false);
+  }
+
+  function handleDeleteOpen() {
+    setDeleteOpen(true);
+  }
+
+  function handleDeleteClose() {
+    setDeleteOpen(false);
   }
 
   const toggleDrawer = open => event => {
@@ -138,8 +151,8 @@ function Layout(props) {
       </Drawer>
 
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={openRenameDialog}
+        onClose={handleRenameClose}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Rename</DialogTitle>
@@ -158,13 +171,13 @@ function Layout(props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleRenameClose} color="primary">
             Cancel
           </Button>
           <Button
             onClick={() => {
               props.renameList(document.getElementById("renameTF").value);
-              handleClose();
+              handleRenameClose();
             }}
             color="primary"
           >
@@ -173,16 +186,49 @@ function Layout(props) {
         </DialogActions>
       </Dialog>
 
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleDeleteClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Delete List</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this list? You will not be able to
+            recover it.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteClose} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              props.deletePage();
+              handleDeleteClose();
+            }}
+            color="secondary"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Paper className={classesPaper.root}>
         <div>
-          <IconButton onClick={handleClickOpen} display="inline">
-            <Edit />
-          </IconButton>
           <Typography variant="h1" display="inline">
             {props.lists[props.selectedIndex].name}
           </Typography>
         </div>
       </Paper>
+      <div className={classes.btnStyles}>
+        <IconButton onClick={handleRenameOpen} display="inline">
+          <Edit />
+        </IconButton>
+        <IconButton onClick={handleDeleteOpen} display="inline">
+          <Delete />
+        </IconButton>
+      </div>
       {props.children}
     </Paper>
   );
