@@ -1,3 +1,10 @@
+# React-Todo-App
+
+## About
+This is a simple app that lets you create Todo lists and todo items. It was made to play around with React Hooks and Material UI.
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
